@@ -1,0 +1,40 @@
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #333; /* Cor de fundo do menu */
+    color: #fff; /* Cor do texto do menu */
+    padding: 10px 0; /* Espaçamento interno do menu */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra do menu */
+}
+
+button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s; 
+}
+
+
+button:hover {
+    background-color: rgba(255, 255, 255, 0.1); 
+}
+
+
+button a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button a:hover {
+    text-decoration: underline;
+}
+
+.textoIntroducao{
+    font-size: large;
+}
