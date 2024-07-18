@@ -11,7 +11,7 @@ function Avaliacoes() {
     useEffect(() => {
         async function fetchAvaliacoes() {
             try {
-                const response = await axios.get("http://localhost:8086/avaliacoes");
+                const response = await axios.get("http://localhost:8080/avaliacoes");
                 setListaDeAvaliacoes(response.data);
             } catch (e) {
                 window.alert("ERRO");
@@ -37,7 +37,7 @@ function Avaliacoes() {
     }
 
     const filteredAvaliacoes = listaDeAvaliacoes.filter(jogo =>
-        jogo.nomeDoJogo.toLowerCase().includes(searchTerm.toLowerCase())
+        jogo.nomedojogo.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -55,10 +55,10 @@ function Avaliacoes() {
                 <div className={styles.avaliacaoContainer}>
                     {filteredAvaliacoes.map((jogo, index) => (
                         <div className={styles.avaliacaoCard} key={index}>
-                            <h2 className={styles.nomeJogo}>{jogo.nomeDoJogo}</h2>
+                            <h2 className={styles.nomeJogo}>{jogo.nomedojogo}</h2>
                             <p className={styles.estrela}>{adicionarEstrelas(jogo)}</p>
-                            <p className={styles.avaliacao}>{"Feito por: " + jogo.usuarioQueEnviou}</p>
-                            <Link to={"/avaliacao/" + jogo.uuid}>
+                            <p className={styles.avaliacao}>{"Feito por: " + jogo.usuarioqueenviou}</p>
+                            <Link to={"/avaliacao/" + jogo.id}>
                                 <button className={styles.entrarBtn}>Entrar</button>
                             </Link>
                         </div>

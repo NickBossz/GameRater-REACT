@@ -10,7 +10,7 @@ import { UserTypeProvider } from './UserTypeContext';
 import Perfil from './pages/perfil/Perfil';
 import Denuncias from './pages/denuncias/Denuncias';
 import Denuncia from './pages/denuncia/Denuncia';
-
+import NaoAutorizado from './pages/naoautorizado/NaoAutorizado';
 function App() {
 
   
@@ -31,6 +31,7 @@ function App() {
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/denuncias" element={<Denuncias />} />
           <Route path="/denuncia/:uuid" element={<Denuncia />} />
+          <Route path="/naoautorizado" element={< NaoAutorizado/>} />
 
         </Routes>
 

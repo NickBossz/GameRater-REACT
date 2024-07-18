@@ -18,10 +18,10 @@ function Registrar() {
             const dados = {
                 usuario: usuario,
                 senha: senha,
-                cargo: "cliente"
+                cargo: "CLIENTE"
             };
-
-            const response = await axios.post("http://localhost:8086/criarUsuario", dados);
+            
+            const response = await axios.post("http://localhost:8080/usuarios", dados);
 
             if (response.data === true) {
                 window.alert("Usuário criado com sucesso");
@@ -57,7 +57,7 @@ function Registrar() {
 
     async function handleLogin() {
         try {
-            const response = await axios.get("http://localhost:8086/usuarios/" + usuario);
+            const response = await axios.get("http://localhost:8080/usuarios/" + usuario);
             setUserType(response.data);
             window.history.pushState({}, '', '/');
             window.location.reload();

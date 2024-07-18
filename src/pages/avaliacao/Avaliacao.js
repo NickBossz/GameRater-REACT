@@ -4,7 +4,6 @@ import styles from './Avaliacao.module.css';
 import Menu from '../Menu';
 import { useUserType } from '../../UserTypeContext';
 import axios from 'axios';
-const { v4: uuidv4 } = require('uuid');
 
 function Avaliacao() {
   let { uuid } = useParams();
@@ -21,12 +20,12 @@ function Avaliacao() {
 
     async function fetchAvaliacao(){
       try {
-        const response = await axios.get("http://localhost:8086/avaliacao/" + uuid)
+        const response = await axios.get("http://localhost:8080/avaliacoes/" + uuid)
     
-        setNomeDoJogo(response.data[0].nomeDoJogo);
-        setAvaliacao(response.data[0].avaliacao);
-        setEstrelas(response.data[0].estrela);
-        setUsuarioQueEnviou(response.data[0].usuarioQueEnviou);
+        setNomeDoJogo(response.data.nomedojogo);
+        setAvaliacao(response.data.avaliacao);
+        setEstrelas(response.data.estrela);
+        setUsuarioQueEnviou(response.data.usuarioqueenviou);
       } catch (e) {
           window.alert("ERRO")
       }
@@ -63,19 +62,18 @@ function Avaliacao() {
   function handleDenunciaSubmit() {
     console.log('Denúncia enviada:', motivoDenuncia);
 
-    const uuidDenuncia = uuidv4();
 
 
     try {
 
       const dados = {
-          feitaPor: userType.usuario,
-          motivoDenuncia: motivoDenuncia,
-          avaliacao: uuid,
-          uuid: uuidDenuncia
+          feitapor: userType.usuario,
+          motivodenuncia: motivoDenuncia,
+          avaliacao: uuid
       }
 
-        const response = axios.post("http://localhost:8086/denunciar", dados)
+        
+        const response = axios.post("http://localhost:8080/denuncias", dados)
         console.log(response.data)
         window.alert("Denuncia enviada com sucesso!")
     } catch {

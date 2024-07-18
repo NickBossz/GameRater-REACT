@@ -3,7 +3,7 @@ import Menu from '../Menu';
 import axios from 'axios';
 import { useState } from 'react';
 import { useUserType } from '../../UserTypeContext';
-const { v4: uuidv4 } = require('uuid');
+
 
 function Avaliar() {
     const [avaliacao, setAvaliacao] = useState('');
@@ -25,16 +25,14 @@ function Avaliar() {
 
     async function save() {
         try {
-            const uniqueId = uuidv4();
             const dados = {
-                usuarioQueEnviou: userType.usuario,
-                nomeDoJogo: nomeDoJogo,
+                usuarioqueenviou: userType.usuario,
+                nomedojogo: nomeDoJogo,
                 avaliacao: avaliacao,
-                estrela: estrela,
-                uuid: uniqueId 
+                estrela: estrela
             };
             
-            await axios.post("http://localhost:8086/avaliar", dados);
+            await axios.post("http://localhost:8080/avaliacoes", dados);
             window.alert("Avaliação enviada com sucesso!");
         } catch (e) {   
             window.alert('ERRO ' + e.response);

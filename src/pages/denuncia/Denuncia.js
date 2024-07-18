@@ -3,9 +3,11 @@ import styles from './Denuncia.module.css';
 import Menu from '../Menu';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useUserType } from '../../UserTypeContext';
 
 function Denuncia() {
     let { uuid } = useParams();
+    const { userType } = useUserType();
 
     const [mostrarConfirmacaoDeEncerrarDenuncia, setMostrarConfirmacaoDeEncerrarDenuncia] = useState(false);
     const [mostrarConfirmacaoDeEncerrarConta, setMostrarConfirmacaoDeEncerrarConta] = useState(false);
@@ -18,18 +20,23 @@ function Denuncia() {
     useEffect(() => {
         async function fetchDenuncia(){
             try {
-                const response = await axios.get("http://localhost:8086/denuncia/" + uuid)
+                const response = await axios.get("http://localhost:8080/denuncias/" + uuid)
             
-                setAvaliacao(response.data[0].avaliacao)
-                setFeitaPor(response.data[0].feitaPor)
-                setMotivo(response.data[0].motivoDenuncia)
+                setAvaliacao(response.data.avaliacao)
+                setFeitaPor(response.data.feitapor)
+                setMotivo(response.data.motivodenuncia  )
             } catch (e) {
                 window.alert("ERRO")
             }
         }
 
+        if (userType == null || userType.cargo !== "FUNCIONARIO") {
+            window.history.pushState({}, '', '/naoautorizado');
+            window.location.reload();
+        }
+
         fetchDenuncia()
-      }, [uuid]);
+      }, [uuid, userType]);
 
     function handleEncerrarDenuncia() {
         setMostrarConfirmacaoDeEncerrarDenuncia(true);
@@ -48,7 +55,7 @@ function Denuncia() {
         setMostrarConfirmacaoDeEncerrarDenuncia(false);
 
         try{
-            axios.delete("http://localhost:8086/excluirDenuncia/" + uuid)
+            axios.delete("http://localhost:8080/denuncias/" + uuid)
         } catch (e){
             window.alert("ERRO")
         }
@@ -58,7 +65,7 @@ function Denuncia() {
 
     function confirmEncerrarAvaliacao(){
         try{
-            axios.delete("http://localhost:8086/excluirAvaliacao/" + avaliacao)
+            axios.delete("http://localhost:8080/avaliacoes/" + avaliacao)
         } catch (e){
             window.alert("ERRO")
         }
@@ -73,7 +80,7 @@ function Denuncia() {
         setMostrarConfirmacaoDeEncerrarConta(false);
 
         try{
-            axios.delete("http://localhost:8086/excluirUsuario/" + feitaPor)
+            axios.delete("http://localhost:8080/usuarios/" + feitaPor)
         } catch (e){
             window.alert("Este usuário não existe!")
         }

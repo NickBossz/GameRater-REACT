@@ -16,7 +16,14 @@ function Login() {
         }
 
         try {
-            const response = await axios.get("http://localhost:8086/usuarios/" + usuario);
+            const response = await axios.get("http://localhost:8080/usuarios/" + usuario);
+            
+            if (response.data === ""){
+                window.alert("Este usuário não existe!");
+                return;
+            }
+            
+
             if (response.data.senha === senha) {
                 setUserType(response.data);
                 window.history.pushState({}, '', '/');

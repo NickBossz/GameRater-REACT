@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useUserType } from '../UserTypeContext';
 import './Menu.module.css'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function Menu(){
     const { userType, setUserType } = useUserType();
@@ -9,19 +10,50 @@ function Menu(){
     useEffect(() => {
 
         if (userType != null) {
+
+            async function checkIfUserStillExists(){
+                try{
+                    const response = await axios.get("http://localhost:8080/usuarios/" + userType.usuario)
+                    
+                    if (response.data === '') {
+                        return false;
+                    }
+                    return true;
+                } catch(e){
+                    return false;
+                }
+        
+            }
+
+            async function handleCheckUser() {
+                const userExists = await checkIfUserStillExists();
+        
+                console.log(userExists);
+        
+                if (!userExists) {
+                    console.log("tirou");
+                    setUserType(null);
+                    window.history.pushState({}, '', '/');
+                    window.location.reload();
+                }
+            }
+
+            handleCheckUser()
             const loginButton = document.getElementById("loginButtonMenu")
             const denunciasButtonMenu = document.getElementById("denunciasButtonMenu")
 
             loginButton.innerHTML = "Sair"
             
             
-            if (userType.cargo !== "funcionario") {
+            if (userType.cargo !== "FUNCIONARIO") {
                 if (denunciasButtonMenu) {
                     denunciasButtonMenu.remove()
                 }
             }
             
         } else {
+        
+
             const perfilButtonMenu = document.getElementById("perfilButtonMenu")
             const AvalieAquiButtonMenu = document.getElementById("avalieAquiButtonMenu")
             const denunciasButtonMenu = document.getElementById("denunciasButtonMenu")
@@ -39,8 +71,13 @@ function Menu(){
             }
         }
 
-    }, [userType]);
+    }, [userType, setUserType]);
     
+
+
+    
+
+
     function onClickLoginButton(){
 
         if (userType != null) {
@@ -49,6 +86,8 @@ function Menu(){
             window.location.reload();
         }
     }
+
+   
 
     return (<>
         <nav>
