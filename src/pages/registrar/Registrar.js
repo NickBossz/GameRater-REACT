@@ -1,91 +1,85 @@
-import styles from './Registrar.module.css';
-import Menu from '../Menu';
-import axios from 'axios';
-import { useState } from 'react';
-import { useUserType } from '../../UserTypeContext';
+import React, { useState } from 'react'
+import styles from '../Auth.module.css'
+import axios from 'axios'
+import { useUserType } from '../../UserTypeContext.js'
+import { useNotification } from '../NotificationManager.js'
 
-function Registrar() {
-    const [usuario, setUsuario] = useState('');
-    const [senha, setSenha] = useState('');
-    const { setUserType } = useUserType();
+function Registrar({ closeModal, onLoginClick }) {
+    const [usuario, setUsuario] = useState('')
+    const [senha, setSenha] = useState('')
+    const { setUserType } = useUserType()
+    const notify = useNotification()
 
     async function criarUsuario() {
-        if (!checarInputs()) {
-            return;
-        }
+        
+     
+        if (!checarInputs()) return
 
         try {
             const dados = {
-                usuario: usuario,
-                senha: senha,
-                cargo: "cliente"
-            };
-
-            const response = await axios.post("http://localhost:8086/criarUsuario", dados);
-
-            if (response.data === true) {
-                window.alert("Usuário criado com sucesso");
-                handleLogin();
-            } else {
-                window.alert("Já existe um usuário com este nome!");
+                username: usuario,
+                password: senha,
+                role: "User"
             }
 
+
+            const response = await axios.post("http://localhost:8080/criarUsuario", dados)
+            console.log(response.data.mensagem)
+            
+            handleLogin()
         } catch (e) {
-            console.log(e);
+            console.log(e)
         }
     }
 
     function onChangeUsuario(event) {
-        setUsuario(event.target.value);
+        setUsuario(event.target.value)
     }
 
     function onChangeSenha(event) {
-        setSenha(event.target.value);
+        setSenha(event.target.value)
     }
 
     function checarInputs() {
-        const passwordInput = document.getElementById("password");
-        const usernameInput = document.getElementById("username");
-
-        if (passwordInput.value === "" || usernameInput.value === "") {
-            window.alert("Preencha todos os campos");
-            return false;
-        }
-
-        return true;
+        return usuario && senha
     }
 
     async function handleLogin() {
         try {
-            const response = await axios.get("http://localhost:8086/usuarios/" + usuario);
-            setUserType(response.data);
-            window.history.pushState({}, '', '/');
-            window.location.reload();
+            const response = await axios.get("http://localhost:8080/usuario/" + usuario)
+            
+            if (response.data.dados && response.data.dados.password === senha) {
+                setUserType(response.data.dados)
+                window.history.pushState({}, '', '/')
+                window.location.reload()
+                notify("Logado com sucesso!", "#0080ff")
+            } else {
+                notify("Erro ao buscar usuário!", "#cc0000")
+            }
         } catch (e) {
-            window.alert("Este usuário não existe!");
+            notify("Erro ao contatar servidor.", "#cc0000")
         }
     }
 
     return (
         <>
-            <Menu />
-            <div className={styles.Registrar}>
-                <div className={styles["register-container"]}>
-                    <h2>Registrar</h2>
-                    <div>
-                        <label htmlFor="username">Usuário</label>
-                        <input type="text" id="username" name="username" onChange={onChangeUsuario} />
-                        <label htmlFor="password">Senha</label>
-                        <input type="password" id="password" name="password" onChange={onChangeSenha} />
-                        <button onClick={criarUsuario}>Registrar</button>
-                    </div>
-                    <div className={styles["login-link"]}>
-                        <p>Já possui conta? <a href="/">Faça login aqui!</a></p>
-                    </div>
+                    <div className={styles.overlay}>
+            <div className={styles.modalContainer}>
+                <button className={styles.closeButton} onClick={closeModal}>✕</button>
+                <div className={styles.tabContainer}>
+                    <button onClick={onLoginClick}>ENTRAR</button>
+                    <button className={styles.activeTab}>CADASTRE-SE</button>
                 </div>
+                <p className={styles.divider}>Insira seus dados abaixo</p>
+                <div className={styles.inputGroup}>
+                    <input type="text" placeholder="Usuário" onChange={onChangeUsuario} />
+                    <input type="password" placeholder="Senha" onChange={onChangeSenha} />
+                </div>
+                <button className={styles.loginButton} onClick={criarUsuario}>Registrar</button>
             </div>
+        </div>
         </>
-    );
+    )
 }
 
-export default Registrar;
+export default Registrar

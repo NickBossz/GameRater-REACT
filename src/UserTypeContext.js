@@ -4,12 +4,12 @@ const UserTypeContext = createContext();
 
 export const UserTypeProvider = ({ children }) => {
   const [userType, setUserType] = useState(() => {
-    // Tenta recuperar o userType do localStorage, se não existir, usa null
+    // Recupera o userType do localStorage ou define como null
     return JSON.parse(localStorage.getItem('userType')) || null;
   });
 
   useEffect(() => {
-    // Salva o userType no localStorage sempre que ele mudar
+    // Atualiza o localStorage quando o userType mudar
     localStorage.setItem('userType', JSON.stringify(userType));
   }, [userType]);
 
