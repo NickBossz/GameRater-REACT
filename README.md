@@ -6,7 +6,7 @@ Este repositório contém o código-fonte de uma aplicação web desenvolvida em
 
 Para a instalação do Back-end acesse: [BACKEND](https://github.com/NickBossz/GameRater-BACKEND/tree/NodeJSBack).
 
-Para clonar e executar esta aplicação, você precisará do [Git](https://git-scm.com) e do [Node.js](https://nodejs.org/en/) (que inclui o npm) instalados em seu computador.
+Para clonar e executar esta aplicação, você precisará do [Git](https://git-scm.com) e do [Node.js](https://nodejs.org/en/) (que inclui o npm) instalados em seu computador na versão 10.8.2.
 A partir da linha de comando:
 
 ```bash
